@@ -202,7 +202,7 @@
     },
     "eventGridSubscriptionName": {
       "type": "string",
-      "defaultValue": "igniteMlWorkspace",
+      "defaultValue": "demoAzMLWorkspace",
       "metadata": {
         "description": "The prefix of the Event Grid custom topic's subscription."
       }
