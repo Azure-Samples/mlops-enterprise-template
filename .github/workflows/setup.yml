@@ -5,9 +5,15 @@ on:
     paths: 
       - '.github/workflows/setup.yml'
  
+ 
+# CONFIGURATION 
+#
+# 1. Set up the following secrets in your repository: 
+#   AZURE_RESOURCE_GROUP 
+#   STORAGE_ACCOUNT 
 env:
-  AZURE_RESOURCE_GROUP: your-resource-group-name
-  STORAGE_ACCOUNT: storage-account-name
+  AZURE_RESOURCE_GROUP: your-resource-group-name   #set this to your resource group name 
+  #STORAGE_ACCOUNT: storage-account-name           #set this to your storage-account-name
     
 jobs:
   deployment:
