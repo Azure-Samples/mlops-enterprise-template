@@ -3,9 +3,7 @@ name: Infra Deployment and Training
 on:
   push:
     paths: 
-      - '.github/workflows/**' 
-      - 'code/**' 
-      - 'infra/**'
+      - '.github/workflows/setup.yml'
  
 env:
   AZURE_RESOURCE_GROUP: your-resource-group-name
