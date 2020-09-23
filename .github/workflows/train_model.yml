@@ -3,7 +3,7 @@ name: Infra Deployment and Training
 on:
   push:
     paths: 
-      - '.github/workflows/**' 
+      - '.github/workflows/train_model.yml' 
       - 'code/**' 
       - 'infra/**'
  
