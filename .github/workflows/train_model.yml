@@ -8,10 +8,7 @@ on:
       - 'infra/**'
   repository_dispatch:
    types: [storage-blobcreated, storage-blobdeleted]
-env:
-  AZURE_RESOURCE_GROUP: your-resource-group-name
-  STORAGE_ACCOUNT: storage-account-name
-    
+
 jobs:
   deployment:
     runs-on: ubuntu-latest
