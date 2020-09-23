@@ -6,7 +6,8 @@ on:
       - '.github/workflows/train_model.yml' 
       - 'code/**' 
       - 'infra/**'
- 
+  repository_dispatch:
+   types: [storage-blobcreated, storage-blobdeleted]
 env:
   AZURE_RESOURCE_GROUP: your-resource-group-name
   STORAGE_ACCOUNT: storage-account-name
@@ -17,7 +18,12 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    # Connect the Azure Machine Learning Workspace
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - name: Check Out Repository
+      id: checkout_repository
+      uses: actions/checkout@v2
+      
+      # Connect the Azure Machine Learning Workspace
     - name: Connect Azure Machine Learning Workspace
       id: aml_workspace
       uses: Azure/aml-workspace@v1
