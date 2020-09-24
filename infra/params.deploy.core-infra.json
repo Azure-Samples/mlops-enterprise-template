@@ -6,7 +6,7 @@
       "value": "igniteCluster"
     },
     "workspaceName": {
-      "value": "igniteMlWorkspace"
+      "value": "demoAzMLWorkspace"
     },
     "DataLakestorageName": {
       "value": "mydlsdemo2"
