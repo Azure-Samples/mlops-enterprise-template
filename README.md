@@ -78,13 +78,17 @@ Please follow [this link](https://help.github.com/en/actions/configuring-and-man
 
 ### 4. Define your workspace parameters
 
-We have precreated a [GitHub Workflow file](/.github/workflows/infra_train.yml) that does the infrastructure creation, trains the model and on successful training completions triggers another workflow that deploys the model. 
+We have precreated a [setup.yml](/.github/workflows/setup.yml) that does the infrastructure creation.
 
-You need to update [this workspace.json](/.cloud/.azure/workspace.json) `resource_group` parameter with that you have used when generating the azure credentials. You can modify the default workspace used here. You also need to update [this workflow action](/.github/workflows/infra_train.yml#L12) `AZURE_RESOURCE_GROUP` env variable with the generated one. 
+Workflow file [train_model.yml](/.github/workflows/train_model.yml) trains the model and on successful training completions triggers another workflow that deploys the model. 
 
-Make sure your resource group name in [workspace.json](/.cloud/.azure/workspace.json) are same as that in [workflow](/.github/workflows/infra_train.yml#L12)
+You need to update [this workspace.json](/.cloud/.azure/workspace.json) `resource_group` parameter with that you have used when generating the azure credentials. You can modify the default workspace used here. 
+You also need to update [this workflow action](/.github/workflows/setup.yml) `AZURE_RESOURCE_GROUP` env variable with the generated one. 
 
-Once you save your changes to the file, the predefined GitHub workflow that trains and deploys a model on Azure Machine Learning gets triggered. Check the actions tab to view if your actions have successfully run.
+Make sure your resource group name in [workspace.json](/.cloud/.azure/workspace.json) are same as that in [workflow](/.github/workflows/setup.yml)
+
+Once you save your changes to the file, the predefined GitHub workflow [setup.yml](/.github/workflows/setup.yml) gets triggered.This will setup all the required resources for training and also will create subscription to MLworkspace.
+Check the actions tab to view if your actions have successfully run.
 
 <p align="center">
   <img src="docs/images/actions_tab.png" alt="GitHub Actions Tab" width="700"/>
@@ -92,8 +96,13 @@ Once you save your changes to the file, the predefined GitHub workflow that trai
 
 
 ### 5. Storage Account
+If user requires to create a subscription to storage account also  user needs to create a new storage account in the same resource group.
+Following extra steps need to be done in the given order for enabling subscription to the created storage account-
+- Remove [line 562](/infra/deploy.core-infra.json#L562) and [line 600](/infra/deploy.core-infra.json#L562) from file [deploy.core-infra.json](/infra/deploy.core-infra.json).
+- Uncomment `STORAGE_ACCOUNT` env variable in [setup.yml](/.github/workflows/setup.yml) and add the name of storage account to be subscribed to.
+  You need to make sure that your storage name and `STORAGE_ACCOUNT` env variable name  specified in [setup.yml](/.github/workflows/setup.yml) both should match.
+- Follow steps mentioned in step 4 to trigger workflow [[setup.yml]](/.github/workflows/setup.yml).
 
-You can either create new one or use the existing storage account in the same resource group, You need to make sure that your storage name and `DataLakestorageName` parameter name  specified in [params.deploy.core-infra.json](/infra/params.deploy.core-infra.json#L11) both should match.
 
 
 ### 6. Review 
