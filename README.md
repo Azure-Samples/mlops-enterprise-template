@@ -123,7 +123,7 @@ After this training completes workflow (/.github/workflows/deploy_model.yml ) an
 
 The log outputs of this workflow [deploy_model.yml](/.github/workflows/deploy_model.yml ) run  will provide URLs for you to get the service endpoints deployed on kubernetes. 
 
-### 7. Next Steps: Modify the code
+### 7. Next Steps: Add Storage Triggers
 
 Now you can start modifying the code in the <a href="/code">`code` folder</a>, so that your model and not the provided sample model gets trained on Azure. Where required, modify the environment yaml so that the training and deployment environments will have the correct packages installed in the conda environment for your training and deployment.
 Upon pushing the changes, actions will kick off your training and deployment run. Check the actions tab to view if your actions have successfully run.
