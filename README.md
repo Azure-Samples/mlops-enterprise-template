@@ -144,7 +144,7 @@ Upon pushing the changes, actions will kick off your training and deployment run
 
 ## Arm template to deploy azure resources
 The workflow file 'setup.yml' deploys arm template to azure using standard azure CLI deploy command.
-Arm Template [deploy.core-infra.json](/infra/deploy.core-infra.json) is used to deploy azure resources to azure . It uses the parameters provided in file [deploy.core-infra.params.json](/infra/deploy.core-infra.params.json)  to create new resources or update the resources if they are already present.
+Arm Template [deploy.core-infra.json](/infra/deploy.core-infra.json) is used to deploy azure resources to azure . It uses the parameters provided in file [deploy.core-infra.params.json](/infra/params.deploy.core-infra.json)  to create new resources or update the resources if they are already present.
 ### Documentation of template file parameters
 
 | Parameter                  | Description                                |
