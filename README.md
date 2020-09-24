@@ -109,14 +109,12 @@ Following extra steps need to be done in the given order for enabling subscripti
 
 
 ### 6. Review 
-The above commit would trigger a workflow run and would auto-trigger another [GH Workflow YML]( /.github/workflows/deploy.yml ) which deploys the trained model on an Azure Kubernetes Cluster. The log outputs of your action will provide URLs for you to view the resources that have been created in AML. Alternatively, you can visit the [Machine Learning Studio](https://ml.azure.com/) to view the progress of your runs, etc. For more details, read the documentation below.
+The above commit would trigger a workflow run and would auto-trigger another [GH Workflow YML]( /.github/workflows/deploy_model.yml ) which deploys the trained model on an Azure Kubernetes Cluster. The log outputs of your action will provide URLs for you to view the resources that have been created in AML. Alternatively, you can visit the [Machine Learning Studio](https://ml.azure.com/) to view the progress of your runs, etc. For more details, read the documentation below.
 
 ### 7. Next Steps: Modify the code
 
 Now you can start modifying the code in the <a href="/code">`code` folder</a>, so that your model and not the provided sample model gets trained on Azure. Where required, modify the environment yaml so that the training and deployment environments will have the correct packages installed in the conda environment for your training and deployment.
 Upon pushing the changes, actions will kick off your training and deployment run. Check the actions tab to view if your actions have successfully run.
-
-Comment lines 39 to 55 in your <a href="/.github/workflows/train_deploy.yml">`"/.github/workflows/train_deploy.yml"` file</a> if you only want to train the model. Uncomment line 7 to 8, if you only want to kick off the workflow when pushing changes to the `"/code/"` file.
 
 
 # Documentation
@@ -145,8 +143,8 @@ Comment lines 39 to 55 in your <a href="/.github/workflows/train_deploy.yml">`"/
 
 
 ## Arm template to deploy azure resources
-The workflow file 'deploy_infra.yml' uses action 'mlopstemplates/aml_configure' to deploy arm template to azure.
-Arm Template is present in './cloud/.azure/' folder (default name='arm_deploy.json') is used to deploy azure resources to azure . It uses the parameters provided in file 'azure.params.json' to create new resources or update the resources if they are already present.
+The workflow file 'setup.yml' deploys arm template to azure using standard azure CLI deploy command.
+Arm Template [deploy.core-infra.json](/infra/deploy.core-infra.json) is used to deploy azure resources to azure . It uses the parameters provided in file [deploy.core-infra.params.json](/infra/deploy.core-infra..params.json))  to create new resources or update the resources if they are already present.
 ### Documentation of template file parameters
 
 | Parameter                  | Description                                |
@@ -176,7 +174,7 @@ The template uses the open source Azure certified Actions listed below. Click on
 
 ## Event Grid Subscription
 User can modify the deploy_event_grid.json arm template to add/remove the storage events that he/she 
-wants to subscribe to [here](https://github.com/mlopstemplates/aml-enterprise-template/blob/ca242dd10b45f0933f83307ba3311d30363f5a22/.cloud/.azure/deploy_event_grid.json#L74)!. These are the available events from storage account :
+wants to subscribe to [here](https://github.com/Azure-Samples/mlops-enterprise-template/blob/eb32e4df6e9124777e9d5216a7b3841992f03924/infra/deploy.core-infra.json#L526). These are the available events from storage account :
 ```sh
 
 Microsoft.Storage.BlobCreated
