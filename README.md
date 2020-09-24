@@ -76,40 +76,52 @@ Please follow [this link](https://help.github.com/en/actions/configuring-and-man
   <img src="docs/images/pat_secret.png" alt="GitHub Template repository" width="700"/>
 </p>
 
-### 4. Define your workspace parameters
+### 4. Setup and Define Triggers
+
+#### Events that trigger workflow
+Github workflows are triggered based on events specified inside workflows. These events can be from inside the github repo like a push commit or can be from outside like a webhook([repository-dispatch](https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#repository_dispatch)).
+Refer [link](https://docs.github.com/en/actions/reference/events-that-trigger-workflows) for more details on configuring your workflows to run on specific events.
+
+#### Setup Trigger
 
 We have precreated a [setup.yml](/.github/workflows/setup.yml) that does the infrastructure creation.
 
-Workflow file [train_model.yml](/.github/workflows/train_model.yml) trains the model and on successful training completions triggers another workflow that deploys the model. 
+To trigger this workflow follow the below steps-
+- Update parameter 'resource_group' value in file [workspace.json](/.cloud/.azure/workspace.json) to your resource group name.
+- Update environment variable 'RESOURCE_GROUP' in [setup.yml](/.github/workflows/setup.yml) workflow. 
 
-You need to update [this workspace.json](/.cloud/.azure/workspace.json) `resource_group` parameter with that you have used when generating the azure credentials. You can modify the default workspace used here. 
-You also need to update [this workflow action](/.github/workflows/setup.yml) `AZURE_RESOURCE_GROUP` env variable with the generated one. 
+Make sure your resource group name in [workspace.json](/.cloud/.azure/workspace.json) is same as that in [setup.yml](/.github/workflows/setup.yml)
+ 
+After setting environment variables changes can be saved by commit which will trigger this workflow for required setup.
 
-Make sure your resource group name in [workspace.json](/.cloud/.azure/workspace.json) are same as that in [setup.yml](/.github/workflows/setup.yml)
-
-Once you save your changes to the file, the predefined GitHub workflow [setup.yml](/.github/workflows/setup.yml) gets triggered.This will setup all the required resources for training and also will create subscription to MLworkspace.
-Check the actions tab to view if your actions have successfully run.
+Check the actions tab to view if your workflows have successfully run.
 
 <p align="center">
   <img src="docs/images/actions_tab.png" alt="GitHub Actions Tab" width="700"/>
 </p>
 
+#### Define Trigger
+We have created sample workflow file [deploy_model](/.github/workflows/deploy_model.yml) that gets triggered on repository dispatch event `machinelearningservices-runcompleted`. This workflow deploys trained model to azure kubernetes.
 
-### 5. Storage Account
-If user requires to create a subscription to storage account also  user needs to create a new storage account in the same resource group.
+When the run trigerred from workflow [train_model.yml](/.github/workflows/train_model.yml) gets completed this workflow  [deploy_model](/.github/workflows/deploy_model.yml) gets triggered. 
 
-To create a new storage account use [link](https://ms.portal.azure.com/#create/Microsoft.StorageAccount-ARM) 
-
-Following extra steps need to be done in the given order for enabling subscription to the created storage account-
-- Remove [line 562](/infra/deploy.core-infra.json#L562) and [line 600](/infra/deploy.core-infra.json#L562) from file [deploy.core-infra.json](/infra/deploy.core-infra.json).
-- Uncomment `STORAGE_ACCOUNT` env variable in [setup.yml](/.github/workflows/setup.yml) and add the name of storage account to be subscribed to.
-  You need to make sure that your storage name and `STORAGE_ACCOUNT` env variable name  specified in [setup.yml](/.github/workflows/setup.yml) both should match.
-- Follow steps mentioned in step 4 to trigger workflow [setup.yml](/.github/workflows/setup.yml).
+If you add this repository dispatch event `machinelearningservices-runcompleted` in other workflows, they will also start listening to the machine learning workspace events from  the subscribed workspace.
 
 
+
+### 5. Testing the trigger
+
+We have created sample workflow file [train_model.yml](/.github/workflows/train_model.yml) to train the model. You need to update this workflow file [train_model.yml](/.github/workflows/train_model.yml)  by doing a commit to  this file or to any file under 'code/' folder.
+
+This workflow trains the model and on successful training completion triggers  workflow [deploy_model](/.github/workflows/deploy_model.yml) that deploys the model.
 
 ### 6. Review 
-The above commit would trigger a workflow run and would auto-trigger another [GH Workflow YML]( /.github/workflows/deploy_model.yml ) which deploys the trained model on an Azure Kubernetes Cluster. The log outputs of your action will provide URLs for you to view the resources that have been created in AML. Alternatively, you can visit the [Machine Learning Studio](https://ml.azure.com/) to view the progress of your runs, etc. For more details, read the documentation below.
+
+Any change required to training code can be made to file [train.py](https://github.com/Azure-Samples/mlops-enterprise-template/blob/main/code/train/train.py).
+Updating this file will trigger workflow [train_model.yml](/.github/workflows/train_model.yml) which will train the model using updated training code.
+After this training completes workflow (/.github/workflows/deploy_model.yml ) and will deploy model to azure kubernetes.
+
+The log outputs of this workflow [deploy_model.yml](/.github/workflows/deploy_model.yml ) run  will provide URLs for you to get the service endpoints deployed on kubernetes. 
 
 ### 7. Next Steps: Modify the code
 
@@ -140,6 +152,17 @@ Upon pushing the changes, actions will kick off your training and deployment run
 | `README.md`                   | This README file.                          |
 | `SECURITY.md`                 | Microsoft Security README.                 |
 
+
+#### Creating  Storage Account subcription
+If user requires to create a subscription to storage account also. For this  user needs to create a new storage account in the same resource group.
+
+To create a new storage account use [link](https://ms.portal.azure.com/#create/Microsoft.StorageAccount-ARM) 
+
+Following extra steps need to be done in the given order for enabling subscription to the created storage account-
+- Remove [line 562](/infra/deploy.core-infra.json#L562) and [line 600](/infra/deploy.core-infra.json#L562) from file [deploy.core-infra.json](/infra/deploy.core-infra.json).
+- Uncomment `STORAGE_ACCOUNT` env variable in [setup.yml](/.github/workflows/setup.yml) and add the name of storage account to be subscribed to.
+  You need to make sure that your storage name and `STORAGE_ACCOUNT` env variable name  specified in [setup.yml](/.github/workflows/setup.yml) both should match.
+- Follow steps mentioned in step 4(setup) to trigger workflow [setup.yml](/.github/workflows/setup.yml).
 
 
 ## Arm template to deploy azure resources
