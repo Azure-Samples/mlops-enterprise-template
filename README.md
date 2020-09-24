@@ -97,7 +97,9 @@ Check the actions tab to view if your actions have successfully run.
 
 ### 5. Storage Account
 If user requires to create a subscription to storage account also  user needs to create a new storage account in the same resource group.
+
 To create a new storage account use [link](https://ms.portal.azure.com/#create/Microsoft.StorageAccount-ARM) 
+
 Following extra steps need to be done in the given order for enabling subscription to the created storage account-
 - Remove [line 562](/infra/deploy.core-infra.json#L562) and [line 600](/infra/deploy.core-infra.json#L562) from file [deploy.core-infra.json](/infra/deploy.core-infra.json).
 - Uncomment `STORAGE_ACCOUNT` env variable in [setup.yml](/.github/workflows/setup.yml) and add the name of storage account to be subscribed to.
