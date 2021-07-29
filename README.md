@@ -1,3 +1,5 @@
+### **INFO: Please visit the following repository to get started with Github Actions for AML: https://github.com/machine-learning-apps/ml-template-azure**. The repository gets actively maintained and monitored.
+
 # ML Ops with GitHub Actions and AML
 
 <p align="center">
